@@ -1,0 +1,60 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %} Sleekpay {% endblock %}</title>
+    <!-- Include Tailwind CSS -->
+    <link rel="stylesheet" href="{% static 'tailwind.min.css' %}">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+<body class="bg-gray-100 font-sans">
+    <header class="bg-blue-500 text-white p-4">
+        <div class="container flex items-center">
+            <!-- <h1 class="text-2xl font-semibold mr-4">Bank App Dashboard</h1> -->
+            <div class="w-80 flex items-center">
+                <h4 class="pr-4"><a href="/"><i class="fa-solid fa-arrow-left"></i></a></h4>
+                <h2 class="text-lg font-semibold">Transaction history</h2>
+            </div>
+            <a href="/" class="mx-auto pl-28 text-2xl"  rel="noopener noreferrer">
+                <!-- <i class="far fa-bell "></i> -->
+                <i class="fas fa-home mr-2"></i> 
+            </a>
+        </div>
+    </header>
+
+    <!-- <div class="flex items-center justify-center">
+        <img class="rounded-full w-12 mx-2" src="{% static 'images/avatars/avatar-female-3.jpg' %}" alt="">
+        <h3 for="recipient" class="block text-lg pl-4 font-semibold">{{ request.user.username }}</h3>
+        <h3 for="recipient" class="block text-sm pl-4 font-medium">{{ request.user.number }}</h3>
+    </div> -->
+
+    <div class="bg-white rounded-lg p-4 m-2  shadow-md">
+        <div class="space-y-4">
+            {% for transaction in transaction_history %}
+            <div class="border-b pb-4">
+                <div class="flex justify-between">
+                    <div>
+                        {% if transaction.sender == request.user %}
+                            <p class="font-semibold">To: {{ transaction.receiver }}</p>
+                        {% else %}
+                            <p class="font-semibold">From: {{ transaction.sender }}</p>
+                        {% endif %}
+                        <p class="text-sm text-gray-500">{{ transaction.date|date:"F j, Y, P" }}</p>
+                    </div>
+                    <div class="text-right">
+                        {% if transaction.sender == request.user %}
+                            <p class="text-red-500">- &#x20A6;{{ transaction.amount|stringformat:"d"|floatformat:2 }}</p>
+                        {% else %}
+                            <p class="text-green-500">+ &#x20A6;{{ transaction.amount|stringformat:"d"|floatformat:2 }}</p>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Profile - Fintech App</title>
+    <!-- Include Tailwind CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css">
+</head>
+<body class="bg-gray-100 min-h-screen flex items-center justify-center">
+    <div class="max-w-2xl w-full bg-white rounded-lg shadow-lg p-8">
+        <h1 class="text-3xl font-semibold text-gray-800 mb-6 text-center">User Profile</h1>
+
+        <!-- Profile Picture -->
+        <div class="flex justify-center mb-6">
+            <img class="w-24 h-24 rounded-full object-cover" src="https://via.placeholder.com/150" alt="Profile Picture">
+        </div>
+
+        <!-- User Details -->
+        <div class="space-y-6">
+            <!-- Full Name -->
+            <div class="flex items-center justify-between">
+                <span class="text-gray-600 font-medium">Full Name:</span>
+                <span class="text-gray-800 font-semibold">John Doe</span>
+            </div>
+            <!-- Email -->
+            <div class="flex items-center justify-between">
+                <span class="text-gray-600 font-medium">Email:</span>
+                <span class="text-gray-800 font-semibold">johndoe@example.com</span>
+            </div>
+            <!-- Phone Number -->
+            <div class="flex items-center justify-between">
+                <span class="text-gray-600 font-medium">Phone Number:</span>
+                <span class="text-gray-800 font-semibold">+1 234 567 890</span>
+            </div>
+            <!-- Account Number -->
+            <div class="flex items-center justify-between">
+                <span class="text-gray-600 font-medium">Account Number:</span>
+                <span class="text-gray-800 font-semibold">1234567890</span>
+            </div>
+            <!-- Account Balance -->
+            <div class="flex items-center justify-between">
+                <span class="text-gray-600 font-medium">Account Balance:</span>
+                <span class="text-gray-800 font-semibold">$10,000.00</span>
+            </div>
+        </div>
+
+        <!-- Actions -->
+        <div class="mt-8 flex justify-between">
+            <button class="bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition duration-300">Edit Profile</button>
+            <button class="bg-red-600 text-white py-2 px-4 rounded-lg hover:bg-red-700 transition duration-300">Delete Account</button>
+        </div>
+    </div>
+</body>
+</html>

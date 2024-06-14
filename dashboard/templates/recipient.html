@@ -1,0 +1,94 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %} Sleekpay {% endblock %}</title>
+    <!-- Include Tailwind CSS -->
+    <link rel="stylesheet" href="{% static 'tailwind.min.css' %}">
+    
+   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+<style>
+    .h22{
+        color: red;
+    }
+  
+</style>
+<body class="bg-gray-100 font-sans">
+    <header class="bg-blue-500 text-white p-4">
+        <div class="container flex items-center">
+            <!-- <h1 class="text-2xl font-semibold mr-4">Bank App Dashboard</h1> -->
+            <div class="w-80 flex items-center">
+                <h4 class="pr-4"><a href="/transfer"><i class="fa-solid fa-arrow-left"></i></a></h4>
+                <h2 class="text-lg font-semibold">Transfer to Recipient</h2>
+            </div>
+            <a href="http://" class="mx-auto pl-28 text-2xl" target="_blank" rel="noopener noreferrer">
+                <i class="far fa-bell "></i>
+            </a>
+        </div>
+        
+            
+        
+        
+    </header>
+    <div class="flex items-center justify-center">
+        <img class="rounded-full w-12 mx-2" src="{% static 'images/avatars/blank-profile-picture.png' %}" alt="">
+        <h3 for="recipient" class="block text-lg pl-4 font-semibold">{{ recipient_username }}</h3>
+        <!-- Display recipient's additional information here -->
+    </div>
+
+    <div class="bg-white rounded-lg p-4 m-2  shadow-md">
+        <form id="transferForm" method="post" class="mt-2">
+            {% csrf_token %}
+           
+            <div class="mb-4">
+                <label for="amount" class="block text-sm font-medium">Amount</label>
+                <input name="transfer" type="number" id="amount" class="w-full border rounded-md p-2">
+            </div>
+            
+            <!-- Display account balance -->
+            <p id="accountBalance" class="text-sm font-medium">Account Balance: ₦{{ account_balance }}</p>
+            
+            <!-- Display error message if amount exceeds available balance -->
+            <p id="errorMessage" class="text-red-500 font-medium hidden h22">Insufficient balance!</p>
+            
+            <!-- Transfer button -->
+            <button id="transferButton" type="submit" class="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600">Transfer</button>
+        </form>
+    </div>
+    
+    <script>
+        $(document).ready(function() {
+            // Get account balance from the HTML
+            var accountBalance = parseFloat("{{ account_balance }}");
+    
+            // Function to handle form submission
+            $('#transferForm').submit(function(event) {
+                // Prevent default form submission
+                event.preventDefault();
+    
+                // Get the entered amount
+                var transferAmount = parseFloat($('#amount').val());
+    
+                // Check if the transfer amount exceeds the available balance
+                if (transferAmount > accountBalance) {
+                    // Show error message
+                    $('#errorMessage').removeClass('hidden');
+                } else {
+                    // Hide error message
+                    $('#errorMessage').addClass('hidden');
+    
+                    // Submit the form
+                    this.submit();
+                }
+            });
+        });
+    </script>
+    
+
+
+
+</body>
+</html>

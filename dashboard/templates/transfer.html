@@ -1,0 +1,113 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %} Sleekpay {% endblock %}</title>
+    <!-- Include Tailwind CSS -->
+    <link rel="stylesheet" href="{% static 'tailwind.min.css' %}">
+    
+   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+
+<body class="bg-gray-100 font-sans">
+    <header class="bg-blue-500 text-white p-4">
+        <div class="container flex items-center">
+            <!-- <h1 class="text-2xl font-semibold mr-4">Bank App Dashboard</h1> -->
+            <div class="w-80 flex items-center">
+                <h4 class="pr-4"><a href="/"><i class="fa-solid fa-arrow-left"></i></a></h4>
+                <h2 class="text-lg font-semibold">Transfer Money</h2>
+            </div>
+            <a href="http://" class="mx-auto pl-28 text-2xl" target="_blank" rel="noopener noreferrer">
+                <i class="far fa-bell "></i>
+            </a>
+        </div>
+    </header>
+        
+    <h3 for="recipient" class="block text-lg pl-4 font-medium">Recipient AccNumber</h3>
+    <div class="bg-white rounded-lg p-4 m-2  shadow-md">
+        <form action="{% url 'fetch_users' %}" method="post" class="mt-2">
+            {% csrf_token %}
+            <div class="mb-4">
+                <label for="recipient"></label>
+                <input placeholder="Enter username" type="text" id="recipient" class="w-full border rounded-md p-2">
+            </div>
+        </form>
+    </div>
+
+    <h3 class="pl-4 block text-lg font-medium">Beneficiaries</h3>
+    <div class="bg-white rounded-lg p-4 m-2  shadow-md userListContainer">
+        {% for user in users %}
+        <div class="w-80 flex items-center">
+            <img class="rounded-full w-12 mr-2" src="{% static 'images/avatars/avatar-female-3.jpg' %}" alt="" srcset="">
+            <h3 class="">
+                <span class="w-28 text-sm font-semibold">{{ user.username }}</span>
+                <br>
+                <!-- <span class="">0909738342</span> -->
+            </h3>
+        </div>
+        {% endfor %}
+          <!-- Container for dynamic user list -->
+    <div id="dynamicUserListContainer"></div>
+    </div>
+
+  
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
+<script>
+    $(document).ready(function() {
+        // Function to fetch users based on input username
+        function fetchUsers(username) {
+            // Make AJAX request
+            $.ajax({
+                url: "{% url 'fetch_users' %}",  // URL to fetch_users view
+                data: {
+                    csrfmiddlewaretoken: '{{ csrf_token }}',  // Include CSRF token
+                    username: username  // Pass the username as a parameter
+                },
+                dataType: 'json',
+                success: function(data) {
+                    // Update HTML content with fetched user data
+                    var userListContainer = $('#dynamicUserListContainer');
+                    userListContainer.empty();  // Clear previous user list
+                    $.each(data, function(index, user) {
+                        // Append each user to the list
+                        var userDiv = $("<div class='w-80 flex items-center'>" +
+                            "<img class='rounded-full w-12 mr-2' src='{% static 'images/avatars/avatar-female-3.jpg' %}' alt='' srcset=''>" +
+                            "<h3 class=''><span class='w-28 text-sm font-semibold'>" + user.username + "</span></h3>" +
+                            "</div>");
+                        
+                        // Add click event listener to userDiv
+                        userDiv.click(function() {
+                            // Redirect to the new page with user's information
+                            window.location.href = '/recipient/' + user.username;
+                        });
+
+                        // Append userDiv to userListContainer
+                        userListContainer.append(userDiv);
+                    });
+                }
+            });
+        }
+
+        // Function to handle input change event
+        $('#recipient').on('input', function() {
+            var username = $(this).val();  // Get the input username
+            fetchUsers(username);  // Call fetchUsers function
+        });
+
+        // Add click event listener to dynamically added users
+        $(document).on('click', '.recipientUser', function() {
+            var clickedUsername = $(this).find('.username').text();
+            window.location.href = '/recipient/' + clickedUsername;
+        });
+    });
+</script>
+
+
+
+
+</body>
+</html>

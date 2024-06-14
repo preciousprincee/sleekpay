@@ -1,0 +1,134 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %} Sleekpay {% endblock %}</title>
+    <!-- Include Tailwind CSS -->
+    <link rel="stylesheet" href="{% static 'tailwind.min.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+</head>
+<body class="bg-gray-100 font-sans p-0 m-0">
+    <header class="bg-blue-500 text-white p-4">
+        <div class="container flex items-center">
+            <a href="/profile" class="flex items-center">
+                <img class="rounded-full w-12 mr-2" src="{% static 'images/avatars/blank-profile-picture.png' %}" alt="" srcset="">
+                <h3 class="">
+                    <span class="">Hello {{ user.username }},</span>
+                    <br>
+                    <span class="text-lg font-semibold">Welcome back!</span>
+                </h3>
+            </a>
+            <a href="/settings" class="mx-auto pl-28 text-2xl" rel="noopener noreferrer">
+                <i class="fa-solid fa-gear"></i>
+            </a>
+        </div>
+    </header>
+
+    <div class="container w-fit mt-8 p-4">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+            <div class="bg-white rounded-lg p-4 shadow-md">
+                <div class="text-lg pl-0 flex items-center justify-between">
+                    <i class="fa-solid fa-wallet ml-4 text-2xl p-0"></i>
+                    <p class="mr-2" >Wallet Balance</p>
+                    <button id="toggleBalance" class="mr-28 text-sm focus:outline-none">
+                        <i class="fas fa-eye-slash"></i>
+                    </button>
+                </div>
+                <p id="balance" class="text-4xl pl-4 font-bold mt-2">
+                    ₦{{ balance_amount }}
+                </p>
+
+                <div class="bg-blue-500 shadow-md text-white p-4 mt-5 container flex items-center">
+                    <a class="px-4" href="/transfer">
+                        <i class="fa-solid fa-money-bill-transfer pr-2 text-5xl"></i>
+                        <br><h3>Transfer</h3>
+                    </a>
+
+                    <a class="px-5" href="/initiate-deposit">
+                        <i class="fa-regular fa-square-plus pr-2 text-5xl"></i><br>
+                        <h3>Topup</h3>
+                    </a>
+
+                    <a class="px-6" href="/history"> 
+                        <i class="fa-solid fa-arrow-rotate-left pr-2 text-5xl"></i>
+                        <h3>History</h3>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Other Services Section -->
+            <div class="bg-white rounded-lg p-4 shadow-md">
+                <h2 class="text-lg pl-4">Other Services</h2>
+                <div class="bg-blue-500 shadow-md text-white p-4 mt-5 justify-center container grid grid-cols-4 gap-4">
+                    <a class="px-4" href="/"> 
+                        <i class="fa-solid fa-file-invoice-dollar pr-2 text-4xl" style="color: #63E6BE;"></i>
+                            <h3 >bills</h3>
+                    </a>
+                    <a class="px-4" href="/"> 
+                        <i class="fa-solid fa-bolt pr-2 text-4xl" style="color: #FFD43B;"></i>
+                            <h3 >Eletricity</h3>
+                    </a>
+                    <a class="px-4" href="/"> 
+                        <i class="fa-solid fa-wifi pr-2 text-4xl" style="color: #d13a15;"></i>
+                            <h3 >Internet</h3>
+                    </a>
+                    <a class="px-4" href="/history"> 
+                        <i class="fa-solid fa-ticket pr-2 text-4xl" style="color: #17f207;"></i>
+                            <h3 >Ticket</h3>
+                    </a> 
+                    <a class="px-4" href="/history"> 
+                        <i class="fa-solid fa-briefcase-medical pr-2 text-4xl" style="color: #be361e;"></i>
+                            <h3 class="pr-10">Airtime</h3>
+                    </a> 
+                    <a class="px-4" href="/history"> 
+                        <i class="fa-solid fa-table-tennis-paddle-ball pr-2 text-4xl" style="color: #74C0FC;"></i>
+                            <h3 >Games</h3>
+                    </a> 
+                    <a class="px-4" href="/history"> 
+                        <i class="fa-solid fa-medal pr-2 text-4xl" style="color: #FFD43B;"></i>
+                            <h3 >Betting</h3>
+                    </a> 
+                    <a class="px-4" href="/history"> 
+                        <i class="fa-solid fa-ellipsis pr-2 text-4xl" style="color: #1e1e20;"></i>
+                            <h3 >More</h3>
+                    </a> 
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const toggleButton = document.getElementById('toggleBalance');
+        const balanceElement = document.getElementById('balance');
+        const initialBalance = ' ₦{{ balance_amount }}'; // Fetch the initial balance from Django context
+        
+        // Check if there's a saved state for the toggleButton in local storage
+        const isBalanceHidden = localStorage.getItem('balanceHidden');
+        if (isBalanceHidden === 'true') {
+            balanceElement.innerText = '****';
+            toggleButton.innerHTML = '<i class="fas fa-eye-slash"></i>';
+        } else {
+            balanceElement.innerText = initialBalance;
+            toggleButton.innerHTML = '<i class="fas fa-eye"></i> ';
+        }
+    
+        toggleButton.addEventListener('click', () => {
+            if (balanceElement.innerText === '****') {
+                balanceElement.innerText = initialBalance;
+                toggleButton.innerHTML = '<i class="fas fa-eye"></i> ';
+                // Update local storage to reflect the new state
+                localStorage.setItem('balanceHidden', 'false');
+            } else {
+                balanceElement.innerText = '****';
+                toggleButton.innerHTML = '<i class="fas fa-eye-slash"></i> ';
+                // Update local storage to reflect the new state
+                localStorage.setItem('balanceHidden', 'true');
+            }
+        });
+    </script>
+
+</body>
+</html>
