@@ -1,4 +1,5 @@
 {% load static %}
+{% load tailwind_tags %}
 <!DOCTYPE html>
 <html lang="en">
 
@@ -70,6 +71,8 @@
             margin-bottom: 20px;
         }
     </style>
+    {% tailwind_preload_css %}
+    {% tailwind_css %}
 </head>
 
 <body class=" flex flex-col items-center justify-center">
