@@ -127,8 +127,14 @@
     <script>
         const toggleButton = document.getElementById('toggleBalance');
         const balanceElement = document.getElementById('balance');
-        const initialBalance = '₦{{ balance_amount }}';
-
+    
+        // Format the balance with commas
+        const formatBalance = (amount) => {
+            return amount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        };
+    
+        const initialBalance = '₦' + formatBalance({{ balance_amount }});
+    
         // Check if there's a saved state for the toggleButton in local storage
         const isBalanceHidden = localStorage.getItem('balanceHidden');
         if (isBalanceHidden === 'true') {
@@ -138,7 +144,7 @@
             balanceElement.innerText = initialBalance;
             toggleButton.innerHTML = '<i class="fas fa-eye-slash"></i>';
         }
-
+    
         toggleButton.addEventListener('click', () => {
             if (balanceElement.innerText === '****') {
                 balanceElement.innerText = initialBalance;
@@ -151,6 +157,7 @@
             }
         });
     </script>
+    
 
 </body>
 </html>
